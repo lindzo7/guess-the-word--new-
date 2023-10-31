@@ -56,11 +56,46 @@ const validateInput = function (input) {
 };
 
 const makeGuess = function (inputLetter) {
-    inputLetter = letter.toUpperCase();
+    inputLetter = inputLetter.toUpperCase();
     if (guessedLetters.includes(inputLetter)) {
         guessedMessage.innerText = "You have already guessed that letter please try again.";
     } else {
         guessedLetters.push(inputLetter);
         console.log(guessedLetters);
+        playerGuesses();
+        updateWord(guessedLetters);
+    }
+};
+
+const playerGuesses = function () {
+    guessedLettersList.innerHTML = "";
+   
+    for (const letter of guessedLetters) {
+        const li = document.createElement("li");
+        li.innerText = letter;
+        guessedLettersList.append(li);
+    }
+};
+
+const updateWord = function (guessedLetters) {
+    const wordUpper = word.toUpperCase();
+    const wordArray = wordUpper.split("");
+    const showWord = [];
+    for (const letter of wordArray) {
+      if (guessedLetters.includes(letter)) {
+        showWord.push(letter.toUpperCase());
+      } else {
+        showWord.push("●");
+      }
+    }
+    //console.log(showWord);
+    wordInProgress.innerText = showWord.join("");
+    winCheck();
+};
+
+const winCheck = function () {
+    if (wordInProgress.innerText === word.toUpperCase()) {
+        guessedMessage.classList.add("win");
+        guessedMessage.innerHTML = "<p class='highlight'>You guessed correct the word! Congrats!</p>";
     }
 };
