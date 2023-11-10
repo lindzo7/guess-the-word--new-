@@ -13,12 +13,12 @@ const remainingSpan = document.querySelector(".remaining span");
 // Empty paragraph where messages will appear when a letter is guessed
 const guessedMessage = document.querySelector(".message");
 // Hidden button that prompts player to play again
-const playAgainButton = document.querySelector(".play-again hide");
+const playAgainButton = document.querySelector(".play-again");
 
 // Test word 
 let word = "magnolia";
 // Array containing all the guessed letters.
-const guessedLetters = [];
+let guessedLetters = [];
 // Maximum number of guesses a player can make
 let remainingGuesses = 8;
 
@@ -29,7 +29,6 @@ const getWord = async function () {
     const randomIndex = Math.floor(Math.random() * wordArray.length);
     word = wordArray[randomIndex].trim();
     placeholder(word);
-    
 };
 
 getWord();
@@ -119,6 +118,7 @@ const countGuesses = function (inputLetter) {
     
     if (remainingGuesses === 0) {
         guessedMessage.innerHTML = `Game over! The word was <span class="highlight">${word}</span>.`;
+        startOver();
     } else if (remainingGuesses === 1) {
         remainingSpan.innerText = `${remainingGuesses} guess`;
     } else {
@@ -130,5 +130,32 @@ const winCheck = function () {
     if (wordInProgress.innerText === word.toUpperCase()) {
         guessedMessage.classList.add("win");
         guessedMessage.innerHTML = "<p class='highlight'>You guessed correct the word! Congrats!</p>";
+        
+        startOver();
     }
 };
+
+const startOver = function () {
+    guessButton.classList.add("hide"); 
+    remainingGuess.classList.add("hide");
+    guessedLettersList.classList.add("hide");
+    playAgainButton.classList.remove("hide");
+};
+
+playAgainButton.addEventListener("click", function () {
+    guessedMessage.classList.remove("win");
+    guessedMessage.innerText = "";
+    guessedLettersList.innerHTML= "";
+    remainingGuesses = 8;
+    guessedLetters = [];
+    remainingSpan.innerText = `${remainingGuesses} guesses`;
+
+    getWord();
+
+    guessButton.classList.remove("hide");
+    remainingGuess.classList.remove("hide");
+    guessedLettersList.classList.remove("hide");
+    playAgainButton.classList.add("hide");
+});
+
+
